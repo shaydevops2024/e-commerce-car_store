@@ -16,16 +16,16 @@ scrape_configs:
       - targets: ["worker:9000"]
 
   # === RabbitMQ metrics (RabbitMQ Prometheus plugin exposes 15692) ===
-  - job_name: "rabbitmq"
+  - job_name: "carstore-rabbitmq"
     static_configs:
       - targets: ["rabbitmq:15692"]
 
   # === Postgres metrics (postgres_exporter container) ===
-  - job_name: "postgres"
+  - job_name: "carstore-postgres"
     static_configs:
       - targets: ["postgres-exporter:9187"]
 
   # === Prometheus self-scrape ===
-  - job_name: "prometheus"
+  - job_name: "carstore-prometheus"
     static_configs:
       - targets: ["localhost:9090"]
