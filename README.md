@@ -333,7 +333,9 @@ Dashboard always returns "Loading…":
 
 ## Monitoring:
 
-Access Grafana using ``` bash http://localhost:3000 ```
+Access Grafana using ``` bash http://localhost:3000 ``` 
+
+Inside Grafana UI, go to "Explore" to see the metrics of Prometheus.
 
 Access Prometheus using ``` bash http://localhost:9090 ```
 
