@@ -337,7 +337,7 @@ Access Grafana using ``` bash http://localhost:3000 ```
 
 Inside Grafana UI, go to "Explore" to see the metrics of Prometheus.
 
-Access Prometheus using ``` bash http://localhost:9090 ```
+Access Prometheus using ``` bash http://34.240.45.69:9090/targets ```
 
 For custom metrics use ``` bash http://backend:8000/metrics ```
 
