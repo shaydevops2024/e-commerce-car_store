@@ -150,7 +150,7 @@ services:
     image: grafana/grafana
     restart: always
     ports:
-      - "3001:3000"
+      - "3000:3000"
     depends_on:
       - prometheus
     volumes:
