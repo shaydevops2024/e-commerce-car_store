@@ -261,21 +261,21 @@ This will start:
   
 Visit in your browser:
 
-``` bash http://localhost:8081 ```
+``` http://localhost:8081 ```
 
 ## How to Test Services
 
 Test Redis:
 
-``` bash curl http://localhost:8000/api/status/redis ```
+``` curl http://localhost:8000/api/status/redis ```
 
 Test RabbitMQ:
 
-``` bash docker exec -it carstore-rabbitmq rabbitmqctl list_queues ```
+``` docker exec -it carstore-rabbitmq rabbitmqctl list_queues ```
 
 Test Postgres:
 
-``` bash docker exec -it carstore-postgres pg_isready ```
+``` docker exec -it carstore-postgres pg_isready ```
 
 Test Dashboard Buttons:
 
@@ -303,7 +303,7 @@ Test Checkout:
 
 - Check Postgres to verify order:
 
-``` bash SELECT * FROM orders; ```
+``` SELECT * FROM orders; ```
 
 ## Troubleshooting
 
@@ -311,19 +311,19 @@ Redis LED stays red:
 
 - Container may have crashed
 
-- Run:  ``` bash docker logs carstore-redis ```
+- Run:  ``` docker logs carstore-redis ```
 
 RabbitMQ no queues:
 
 - Check if default virtual host / exists
 
-- Run: ``` bash rabbitmqctl list_queues ```
+- Run: ``` rabbitmqctl list_queues ```
 
 Postgres error:
 
 - Ensure DB is reachable
 
-- Run: ``` bash pg_isready ```
+- Run: ``` pg_isready ```
 
 Dashboard always returns "Loading…":
 
@@ -333,13 +333,13 @@ Dashboard always returns "Loading…":
 
 ## Monitoring:
 
-Access Grafana using ``` bash http://localhost:3000 ``` 
+Access Grafana using ``` http://localhost:3000 ``` 
 
 Inside Grafana UI, go to "Explore" to see the metrics of Prometheus.
 
-Access Prometheus using ``` bash http://34.240.45.69:9090/targets ```
+Access Prometheus using ``` http://34.240.45.69:9090/targets ```
 
-For custom metrics use ``` bash http://backend:8000/metrics ```
+For custom metrics use ``` http://backend:8000/metrics ```
 
 ### Overview of the Monitoring Architecture
 
