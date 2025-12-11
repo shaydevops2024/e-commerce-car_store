@@ -1,0 +1,171 @@
+version: "3.9"
+
+services:
+
+  # ==========================
+  # PostgreSQL Database
+  # ==========================
+  postgres:
+    container_name: carstore-postgres
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: carstore
+      POSTGRES_PASSWORD: carstore
+      POSTGRES_DB: carstore
+    volumes:
+      - ./backend/db_init.sql:/docker-entrypoint-initdb.d/001_db_init.sql
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - carstore-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U carstore"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ==========================
+  # Redis Cache
+  # ==========================
+  redis:
+    container_name: carstore-redis
+    image: redis:alpine
+    restart: always
+    networks:
+      - carstore-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "PING"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ==========================
+  # RabbitMQ Message Broker
+  # ==========================
+  rabbitmq:
+    container_name: carstore-rabbitmq
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - "15672:15672"   # RabbitMQ UI
+      - "5672:5672"     # AMQP protocol
+    networks:
+      - carstore-net
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  # ==========================
+  # Backend API (Flask)
+  # ==========================
+  backend:
+    container_name: carstore-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      FLASK_HOST: 0.0.0.0
+      FLASK_PORT: 8000
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_QUEUE: orders
+      POSTGRES_USER: carstore
+      POSTGRES_PASSWORD: carstore
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: carstore
+      REDIS_CONTAINER: carstore-redis
+      RABBIT_CONTAINER: carstore-rabbitmq
+      POSTGRES_CONTAINER: carstore-postgres
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+      - /var/run/docker.sock:/var/run/docker.sock   # REQUIRED for service control
+    networks:
+      - carstore-net
+
+  # ==========================
+  # Worker Service
+  # ==========================
+  worker:
+    container_name: carstore-worker
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - backend
+      - rabbitmq
+      - postgres
+    networks:
+      - carstore-net
+
+  # ==========================
+  # Frontend (NGINX)
+  # ==========================
+  frontend:
+    container_name: carstore-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "8081:80"
+    networks:
+      - carstore-net
+
+  # ==========================
+  # Prometheus
+  # ==========================
+  prometheus:
+    container_name: carstore-prometheus
+    image: prom/prometheus
+    restart: always
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - carstore-net
+
+  # ==========================
+  # Grafana
+  # ==========================
+  grafana:
+    container_name: carstore-grafana
+    image: grafana/grafana
+    restart: always
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/grafana_dashboard.json:/var/lib/grafana/dashboards/dashboard.json
+    networks:
+      - carstore-net
+
+# ==========================
+# NETWORKS & VOLUMES
+# ==========================
+networks:
+  carstore-net:
+
+volumes:
+  pgdata:
+  grafana_data:

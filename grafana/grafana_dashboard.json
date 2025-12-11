@@ -1,0 +1,41 @@
+{
+  "id": null,
+  "title": "CarStore E-Commerce Metrics",
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "version": 1,
+  "panels": [
+    {
+      "type": "graph",
+      "title": "Requests per Endpoint",
+      "targets": [
+        {
+          "expr": "sum by (endpoint) (REQUESTS_total)",
+          "legendFormat": "{{endpoint}}"
+        }
+      ],
+      "id": 1
+    },
+    {
+      "type": "graph",
+      "title": "Checkout Latency P95",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(REQUEST_LATENCY_seconds_bucket[5m])) by (le))",
+          "legendFormat": "p95 latency"
+        }
+      ],
+      "id": 2
+    },
+    {
+      "type": "stat",
+      "title": "Total Orders Processed",
+      "targets": [
+        {
+          "expr": "ORDERS_PROCESSED_total"
+        }
+      ],
+      "id": 3
+    }
+  ]
+}

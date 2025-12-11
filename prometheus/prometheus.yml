@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+
+  # === Backend API metrics ===
+  - job_name: "carstore-backend"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["backend:8000"]
+
+  # === Prometheus self-scrape ===
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]

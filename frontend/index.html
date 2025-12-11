@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CarStore</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+    <div class="nav-left">
+        <span class="brand">CarStore</span>
+    </div>
+    <div class="nav-right">
+        <button id="catalogBtn">Catalog</button>
+        <button id="cartBtn">Cart (<span id="cartCount">0</span>)</button>
+        <button id="dashboardBtn">Service Dashboard</button>
+    </div>
+</nav>
+
+<!-- =======================
+     CATALOG SECTION
+======================= -->
+<section id="catalogSection" class="active">
+    <h1>Car Catalog</h1>
+    <p class="subtitle">Soft orange &amp; soft green theme • Car store demo</p>
+    <div id="catalogGrid" class="grid"></div>
+</section>
+
+<!-- =======================
+     CART SECTION
+======================= -->
+<section id="cartSection">
+    <h1>Your Cart</h1>
+    <div id="cartItems"></div>
+
+    <form id="checkoutForm">
+        <h3>Checkout</h3>
+        <input id="custName" placeholder="Name" required>
+        <input id="custEmail" placeholder="Email" required>
+        <button type="button" id="checkoutBtn">Complete Purchase</button>
+    </form>
+</section>
+
+<!-- =======================
+     SERVICE DASHBOARD
+======================= -->
+<section id="dashboardSection">
+    <h1>Service Dashboard</h1>
+    <p class="subtitle">Control &amp; live logs for Redis, RabbitMQ, and Postgres</p>
+
+    <div class="dashboard-grid">
+
+        <!-- REDIS PANEL -->
+        <div class="dash-box">
+            <div class="dash-header">
+                <div class="service-title">
+                    <span class="status-led" id="redisLed"></span>
+                    <h3>Redis</h3>
+                </div>
+                <span class="service-chip redis-chip">Cache</span>
+            </div>
+            <div class="service-controls">
+                <button class="service-btn"
+                        data-service="redis"
+                        data-action="stop"
+                        data-target="redisStatus">
+                    Stop
+                </button>
+                <button class="service-btn"
+                        data-service="redis"
+                        data-action="start"
+                        data-target="redisStatus">
+                    Start
+                </button>
+                <button class="service-btn"
+                        data-service="redis"
+                        data-action="status"
+                        data-target="redisStatus">
+                    Status
+                </button>
+            </div>
+            <pre id="redisStatus" class="log-output">Loading...</pre>
+        </div>
+
+        <!-- RABBITMQ PANEL -->
+        <div class="dash-box">
+            <div class="dash-header">
+                <div class="service-title">
+                    <span class="status-led" id="rabbitLed"></span>
+                    <h3>RabbitMQ</h3>
+                </div>
+                <span class="service-chip rabbit-chip">Queue</span>
+            </div>
+            <div class="service-controls">
+                <button class="service-btn"
+                        data-service="rabbit"
+                        data-action="stop"
+                        data-target="rabbitStatus">
+                    Stop
+                </button>
+                <button class="service-btn"
+                        data-service="rabbit"
+                        data-action="start"
+                        data-target="rabbitStatus">
+                    Start
+                </button>
+                <button class="service-btn"
+                        data-service="rabbit"
+                        data-action="status"
+                        data-target="rabbitStatus">
+                    Status
+                </button>
+            </div>
+            <pre id="rabbitStatus" class="log-output">Loading...</pre>
+        </div>
+
+        <!-- ORDERS (POSTGRES) PANEL -->
+        <div class="dash-box">
+            <div class="dash-header">
+                <div class="service-title">
+                    <span class="status-led" id="postgresLed"></span>
+                    <h3>Postgres (Orders)</h3>
+                </div>
+                <span class="service-chip pg-chip">Database</span>
+            </div>
+            <div class="service-controls">
+                <button class="service-btn"
+                        data-service="postgres"
+                        data-action="stop"
+                        data-target="ordersStatus">
+                    Stop
+                </button>
+                <button class="service-btn"
+                        data-service="postgres"
+                        data-action="start"
+                        data-target="ordersStatus">
+                    Start
+                </button>
+                <button class="service-btn"
+                        data-service="postgres"
+                        data-action="status"
+                        data-target="ordersStatus">
+                    Status
+                </button>
+            </div>
+            <pre id="ordersStatus" class="log-output">Loading...</pre>
+        </div>
+
+    </div>
+</section>
+
+<!-- SUCCESS MODAL -->
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <p id="successMessage"></p>
+        <button onclick="closeModal()">Close</button>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
